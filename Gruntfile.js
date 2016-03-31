@@ -36,8 +36,16 @@ module.exports = function(grunt) {
     },
 
     eslint: {
-      target: [
-        // Add list of files to lint here
+      options: {
+        rulesDir: '.eslintrc.js'
+      },
+      target: [ 
+        'public/client/*',
+        'public/lib/*',
+        'lib/*',
+        'app/*',
+        'server.js',
+        'server-config.js'
       ]
     },
 
@@ -51,6 +59,7 @@ module.exports = function(grunt) {
           'public/lib/**/*.js',
         ],
         tasks: [
+          'eslint',
           'concat',
           'uglify'
         ]
@@ -75,6 +84,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-git');
 
   grunt.registerTask('server-dev', function (target) {
     // Running nodejs in a different process and displaying output on the main console
@@ -92,7 +102,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
-      // add your production server task here
+      // add your production server task heren
     }
     grunt.task.run([ 'server-dev' ]);
   });
@@ -105,18 +115,27 @@ module.exports = function(grunt) {
     'mochaTest'
   ]);
 
-  grunt.registerTask('build', ['concat', 'uglify']);
+  grunt.registerTask('build', ['eslint', 'concat', 'uglify']);
+
+  grunt.registerTask('watch', ['watch']);
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
       // add your production server task here
+
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
   });
 
+  grunt.registerTask('default', ['test', 'build']);
+
   grunt.registerTask('deploy', [
     // add your deploy tasks here
+    'default',
+    'watch'
+    //call build
+    //call upload
   ]);
 
 
