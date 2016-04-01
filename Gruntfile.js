@@ -72,6 +72,8 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+        command: 'git remote add live ssh://root@178.62.245.13/var/repo/site.git',
+        command: 'git push live master'
       }
     },
   });
@@ -84,7 +86,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
-  grunt.loadNpmTasks('grunt-git');
+  // grunt.loadNpmTasks('grunt-git');
 
   grunt.registerTask('server-dev', function (target) {
     // Running nodejs in a different process and displaying output on the main console
@@ -103,6 +105,7 @@ module.exports = function(grunt) {
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
       // add your production server task heren
+      grunt.task.run(['shell']);
     }
     grunt.task.run([ 'server-dev' ]);
   });
@@ -122,6 +125,7 @@ module.exports = function(grunt) {
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
       // add your production server task here
+
 
     } else {
       grunt.task.run([ 'server-dev' ]);
